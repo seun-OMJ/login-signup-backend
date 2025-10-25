@@ -1,0 +1,10 @@
+### Login Post request check
+POST http://localhost:5000/signup
+Content-Type: application/json
+
+{
+    "firstname":"tester",
+    "lastname":"testerson",
+    "email": "test@abc.co",
+    "password": "1234321"
+}
