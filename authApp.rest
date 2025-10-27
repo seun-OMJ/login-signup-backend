@@ -1,10 +1,19 @@
-### Login Post request check
+### Signup Post request check
 POST http://localhost:5000/signup
 Content-Type: application/json
 
 {
     "firstName":"Gilgamesh",
     "lastName":"Etern",
+    "email": "gilgash@abc2.com",
+    "password": "1234321"
+}
+
+### Login Post request check
+POST http://localhost:5000/login
+Content-Type: application/json
+
+{
     "email": "gilgash@abc2.com",
     "password": "1234321"
 }
