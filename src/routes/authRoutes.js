@@ -54,4 +54,25 @@ router.post('/login', async (req, res) => {
     }
 })
 
+router.post('/resetPassword', async(req, res) =>{
+    const { email, password } = req.body
+    console.log(req.body)
+    try {
+        const existingUser = await getUserByEmail(email)
+        if (!existingUser) {
+            return res.status(400).send({ message: "If user exists, password reset link sent" })
+        }
+        const hashedPassword = bcrypt.hashSync(password, 7)
+        const updatedUser = await updateUserPassword(email, hashedPassword)
+        res.status(201).json({
+            message: "password reset successful",
+            updatedUser
+        });
+
+    } catch (error) {
+        console.log(error.message)
+        res.sendStatus(501)
+    }
+})
+
 export default router
