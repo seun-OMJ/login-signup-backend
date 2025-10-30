@@ -54,24 +54,23 @@ router.post('/login', async (req, res) => {
     }
 })
 
-router.post('/resetPassword', async(req, res) =>{
-    const { email, password } = req.body
-    console.log(req.body)
+router.post('/resetPassword', async (req, res) => {
+    const { token, email, password } = req.body
+
     try {
-        const existingUser = await getUserByEmail(email)
-        if (!existingUser) {
-            return res.status(400).send({ message: "If user exists, password reset link sent" })
-        }
+        const decoded = jwt.verify(token, process.env.JWT_SECRET)
+        const email = decoded.email
         const hashedPassword = bcrypt.hashSync(password, 7)
         const updatedUser = await updateUserPassword(email, hashedPassword)
-        res.status(201).json({
-            message: "password reset successful",
-            updatedUser
-        });
-
-    } catch (error) {
-        console.log(error.message)
-        res.sendStatus(501)
+        res.status(200).json({
+            message: "password reset successful"
+        })
+    }
+    catch (error) {
+        if (error.name === 'TokenExpiredError') {
+            return res.status(400).send({ message: "Reset link expired" });
+        }
+        res.status(400).send({ message: "Invalid or expired token" });
     }
 })
 
